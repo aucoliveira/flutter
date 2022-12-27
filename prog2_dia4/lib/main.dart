@@ -11,7 +11,15 @@ class meuApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //home: pagina1(),
-      home: pagina3(),
+      //home: pagina3(),
+      //home: login(),
+      routes: {
+        "/": (context) => login(),
+        "pagina1": (context) => pagina1(),
+        "pagina2": (context) => pagina2(),
+        "pagina3": (context) => pagina3(),
+        "/": (context) => login(),
+      },
     );
   }
 }
@@ -24,8 +32,13 @@ class pagina1 extends StatelessWidget {
         title: Row(
           children: [
             Text("Pagina 1"),
-            Icon(
-              Icons.arrow_forward,
+            IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, "pagina2");
+              },
+              icon: Icon(
+                Icons.arrow_forward,
+              ),
             ),
           ],
         ),
@@ -49,12 +62,28 @@ class menu extends StatelessWidget {
         Icons.copyright,
       ),
       TextButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.popAndPushNamed(context, "pagina1");
+        },
         child: Text("Pagina 1"),
       ),
       TextButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.popAndPushNamed(context, "pagina2");
+        },
         child: Text("Pagina 2"),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.popAndPushNamed(context, "pagina3");
+        },
+        child: Text("Pagina 3"),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.popAndPushNamed(context, "/");
+        },
+        child: Text("login"),
       ),
     ]);
   }
@@ -111,9 +140,22 @@ class pagina2 extends StatelessWidget {
       appBar: AppBar(
         title: Row(
           children: [
+            IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, "pagina1");
+              },
+              icon: Icon(
+                Icons.arrow_back,
+              ),
+            ),
             Text("Pagina 2"),
-            Icon(
-              Icons.arrow_forward,
+            IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, "pagina3");
+              },
+              icon: Icon(
+                Icons.arrow_forward,
+              ),
             ),
           ],
         ),
@@ -172,8 +214,13 @@ class pagina3 extends StatelessWidget {
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(
-              Icons.back_hand,
+            IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, "pagina2");
+              },
+              icon: Icon(
+                Icons.arrow_back,
+              ),
             ),
             Text("Pagina 3"),
           ],
@@ -255,6 +302,93 @@ class _conteudoPagina3State extends State<conteudoPagina3> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class login extends StatelessWidget {
+  String email = "";
+  String senha = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(
+                "http://caminhandoembeleza.com/wp-content/uploads/2020/12/03191435682598.gif"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                onChanged: (value) {
+                  email = value;
+                  print("$email");
+                },
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'email',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(5)),
+              TextField(
+                onChanged: (value) {
+                  senha = value;
+                },
+                obscureText: true, //esconde a senha
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'senha',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(10)),
+              TextButton(
+                onPressed: () {
+                  if (email == "fit@fit.br" && senha == "123") {
+                    print("Entrada autorizada");
+                    Navigator.popAndPushNamed(context, "pagina1");
+                  } else {
+                    print("Email ou senha incorreto");
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Usuario ou senha incorreto"),
+                        );
+                      },
+                    );
+                  }
+                },
+                child: Text("Login"),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.blueAccent, //cor do fundo
+
+                  onSurface: Colors.grey,
+                  padding: const EdgeInsets.all(25), //margem no botão ou
+                  //fixedSize: const Size(100, 100), //tamanho fixo da margem
+                  shape: RoundedRectangleBorder(
+                    //side: BorderSide(color: Colors.green, width: 5), // borda do botão
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
